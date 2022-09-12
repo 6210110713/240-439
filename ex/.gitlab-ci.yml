@@ -1,0 +1,39 @@
+image: "python:3.10"
+
+before_script:
+    - python --version
+   # - pip install -r requirements.txt
+   # - python setup.py develop
+
+stages:
+    - Code Analysis
+    - Test
+##   - Deploy
+
+flake8:
+    stage: Code Analysis
+    script:
+        - pip install flake8
+        - flake8 --max-line-length=120 ../FIZZBUZZ/FIZZANDBUZZ/*.py
+        - flake8 --max-line-length=120 ../FIZZBUZZ/TestFizzbuzz/*.py
+       ## - flake8 --max-line-length=120 tests/*.py
+
+pylint:
+    stage: Code Analysis
+    allow_failure: true
+    script:
+        - pip install pylint
+        - pylint -d C0301 ../FIZZBUZZ/FIZZANDBUZZ/*.py
+
+test:
+    stage: Test
+    script:
+    # this configures Django application to use attached postgres database that is run on `postgres` host
+        # - export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
+        # - apt-get update -qy
+        # - apt-get install -y python-dev python-pip
+        # - pip install -r requirements.txt
+        # - pip install nose
+        - pip install coverage nose2
+        - nose2 -v --with-coverage
+
